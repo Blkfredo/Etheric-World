@@ -1,0 +1,24 @@
+# Runtime logs
+*.log
+state_log.csv
+trade_log.csv
+error_log.csv
+relay_log.csv
+
+# MetaTrader generated files
+*.ex5
+*.opt
+*.set
+
+# Backups and local archives
+Backups/
+**/Backups/
+Archive/
+**/Archive/
+
+# Local/editor noise
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini
+
