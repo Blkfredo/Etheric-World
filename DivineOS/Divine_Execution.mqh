@@ -106,12 +106,14 @@ public:
         }
       m_relay = RELAY_INIT;
       m_log.RelayLog(decision.sequence_id,"INIT",decision.symbol,"RELAY_INIT",true,"OK");
+      m_log.Info("RELAY","status=INIT symbol=" + decision.symbol);
 
       double lots = m_risk.RecommendedLots(decision.symbol);
       if(!m_risk.AllowsTrade(decision.symbol,decision.direction,lots,reason_code))
         {
          m_relay = RELAY_STOPPED;
          m_log.RelayLog(decision.sequence_id,"STOPPED",decision.symbol,reason_code,false,"RISK_BLOCKED");
+         m_log.Info("RELAY","status=STOPPED reason=" + reason_code);
          m_state.Transition(STATE_RELAY_STOPPED,"RELAY_RISK_BLOCKED");
          return false;
         }
@@ -120,6 +122,7 @@ public:
         {
          m_relay = RELAY_STOPPED;
          m_log.RelayLog(decision.sequence_id,"STOPPED",decision.symbol,reason_code,false,"GOV_BLOCKED");
+         m_log.Info("RELAY","status=STOPPED reason=" + reason_code);
          m_state.Transition(STATE_RELAY_STOPPED,"RELAY_GOV_BLOCKED");
          return false;
         }
@@ -129,6 +132,7 @@ public:
       m_relay = RELAY_RUNNING;
       reason_code = "RELAY_ALLOWED";
       m_log.RelayLog(decision.sequence_id,"RUNNING",decision.symbol,reason_code,true,"READY");
+      m_log.Info("RELAY","status=RUNNING symbol=" + decision.symbol);
       return true;
      }
 
@@ -142,11 +146,13 @@ public:
          return false;
       m_relay = RELAY_SHUTTING_DOWN;
       m_log.RelayLog(seq,"SHUTTING_DOWN",symbol,reason_code,true,"OK");
+      m_log.Info("RELAY","status=SHUTTING_DOWN reason=" + reason_code);
 
       if(!m_state.Transition(STATE_RELAY_STOPPED,"RELAY_STOPPED"))
          return false;
       m_relay = RELAY_STOPPED;
       m_log.RelayLog(seq,"STOPPED",symbol,reason_code,true,"OK");
+      m_log.Info("RELAY","status=STOPPED reason=" + reason_code);
       return true;
      }
 
@@ -180,6 +186,7 @@ public:
          return false;
 
       m_log.ErrorLog(m_state.NextSequence(),"EXEC","EMERGENCY_STOP",reason_code);
+      m_log.Info("EXEC","EMERGENCY_STOP reason=" + reason_code);
       if(!m_state.Transition(STATE_EMERGENCY_STOP,reason_code))
          return false;
 
@@ -187,8 +194,10 @@ public:
       long seq = m_state.NextSequence();
       m_relay = RELAY_SHUTTING_DOWN;
       m_log.RelayLog(seq,"SHUTTING_DOWN",_Symbol,"EMERGENCY_STOP",true,"FORCED");
+      m_log.Info("RELAY","status=SHUTTING_DOWN reason=EMERGENCY_STOP");
       m_relay = RELAY_STOPPED;
       m_log.RelayLog(seq,"STOPPED",_Symbol,"EMERGENCY_STOP",true,"FORCED");
+      m_log.Info("RELAY","status=STOPPED reason=EMERGENCY_STOP");
       return m_state.Transition(STATE_LOCKED,"EMERGENCY_STOP_LOCKED");
      }
   };

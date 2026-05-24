@@ -28,7 +28,9 @@ int OnInit()
    g_state.DetectMode();
    g_execution.Bind(g_risk,g_gov,g_state,g_log);
    g_state.Transition(STATE_READY,"INIT_READY");
-   g_log.Info("INIT","mode=" + g_state.ModeText());
+   g_log.Info("INIT","state=" + g_state.StateText(g_state.Current()) + " mode=" + g_state.ModeText());
+   if(g_state.Mode() == MICRO_SURVIVAL_MODE)
+      g_log.Info("RISK","MICRO_SURVIVAL_MODE active balance=" + DoubleToString(g_risk.Balance(),2));
    return INIT_SUCCEEDED;
   }
 

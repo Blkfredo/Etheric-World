@@ -93,6 +93,7 @@ public:
         {
          m_log.StateLog(seq,StateText(from_state),StateText(STATE_LOCKED),"LOCK_STATE_INVALID_TRANSITION","LOCKED");
          m_log.ErrorLog(seq,"STATE","LOCK_STATE_INVALID_TRANSITION",StateText(from_state) + "->" + StateText(to_state));
+         m_log.Info("STATE","LOCK_STATE_INVALID_TRANSITION " + StateText(from_state) + "->" + StateText(to_state));
         }
       return false;
      }
