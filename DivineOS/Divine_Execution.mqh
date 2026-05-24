@@ -57,7 +57,8 @@ public:
       if(!m_state.Transition(STATE_EXECUTING,"EXEC_REQUEST"))
          return false;
 
-      if(!m_risk.AllowsTrade(decision.symbol,reason))
+      double lots = m_risk.RecommendedLots(decision.symbol);
+      if(!m_risk.AllowsTrade(decision.symbol,decision.direction,lots,reason))
         {
          m_log.Reason("EXEC",decision.symbol,reason,false);
          m_log.TradeLog(decision.sequence_id,m_state.ModeText(),decision.symbol,"BLOCK",0.0,reason,"RISK_BLOCKED");
@@ -81,7 +82,6 @@ public:
          return false;
         }
 
-      double lots = m_risk.MinimumLot(decision.symbol);
       m_log.Reason("EXEC",decision.symbol,"ORDER_READY",true);
       m_log.TradeLog(decision.sequence_id,m_state.ModeText(),decision.symbol,"ORDER_READY",lots,"EXECUTION_ALLOWED","DRY_RUN_PHASE1");
       m_state.Transition(STATE_READY,"EXEC_COMPLETE_PHASE1");
@@ -107,7 +107,8 @@ public:
       m_relay = RELAY_INIT;
       m_log.RelayLog(decision.sequence_id,"INIT",decision.symbol,"RELAY_INIT",true,"OK");
 
-      if(!m_risk.AllowsTrade(decision.symbol,reason_code))
+      double lots = m_risk.RecommendedLots(decision.symbol);
+      if(!m_risk.AllowsTrade(decision.symbol,decision.direction,lots,reason_code))
         {
          m_relay = RELAY_STOPPED;
          m_log.RelayLog(decision.sequence_id,"STOPPED",decision.symbol,reason_code,false,"RISK_BLOCKED");

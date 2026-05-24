@@ -14,6 +14,9 @@
 
 input double DivineMaxRiskPercent = 0.25;
 input int    DivineMaxSpreadPoints = 35;
+input double DivineMicroMaxRiskPercent = 0.10;
+input int    DivineMicroMaxSpreadPoints = 20;
+input double DivineMicroMinFreeMarginPercent = 70.0;
 input bool   DivineRelayEnabled = true;
 
 #endif

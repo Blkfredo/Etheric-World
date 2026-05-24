@@ -84,3 +84,16 @@ Phase 1 stabilization is complete for the runtime state machine, relay guard pat
 
 Advanced trading logic remains intentionally excluded.
 
+## Phase 1B Micro Survival Runtime
+
+Phase 1B activates `MICRO_SURVIVAL_MODE` in the runtime execution path.
+
+Implemented behavior:
+
+- accounts below `$100` remain in `MICRO_SURVIVAL_MODE`
+- minimum broker-valid lot is forced for micro execution checks
+- micro spread limit is stricter than the standard spread limit
+- micro margin-buffer checks run before execution or relay approval
+- relay uses the same risk gate as normal execution
+
+No Oracle, Ghost Trading, AI, Redis, Python, external services, or advanced strategy logic were added.
